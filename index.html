@@ -2,21 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cool Distance Namer</title>
+  <title>How Far Was That?</title>
   <style>
-    body { font-family: sans-serif; margin: 2em; }
-    input, button { padding: 0.5em; font-size: 1em; }
-    #output { margin-top: 1em; font-size: 1.2em; }
+    body {
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #4f8cff 0%, #a6ffcb 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      border-radius: 1.5em;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+      padding: 2.5em 2em 2em 2em;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      transition: box-shadow 0.2s;
+    }
+    .card:hover {
+      box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.22);
+    }
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 0.2em;
+      color: #2b2d42;
+      letter-spacing: -1px;
+      font-weight: 700;
+    }
+    p {
+      color: #555;
+      margin-bottom: 1.5em;
+      font-size: 1.1em;
+    }
+    input[type="number"] {
+      padding: 0.7em 1em;
+      font-size: 1.1em;
+      border: 1.5px solid #4f8cff;
+      border-radius: 0.7em;
+      outline: none;
+      margin-right: 0.5em;
+      width: 120px;
+      transition: border 0.2s;
+      background: #f7faff;
+    }
+    input[type="number"]:focus {
+      border: 2px solid #2b2d42;
+      background: #eaf6ff;
+    }
+    button {
+      padding: 0.7em 1.5em;
+      font-size: 1.1em;
+      background: linear-gradient(90deg, #4f8cff 60%, #38ef7d 100%);
+      color: #fff;
+      border: none;
+      border-radius: 0.7em;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(79, 140, 255, 0.08);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #38ef7d 0%, #4f8cff 100%);
+      box-shadow: 0 4px 16px rgba(56, 239, 125, 0.12);
+    }
+    #output {
+      margin-top: 2em;
+      font-size: 1.25em;
+      background: #f7faff;
+      border-radius: 1em;
+      padding: 1.2em 1em;
+      min-height: 3em;
+      color: #222;
+      box-shadow: 0 1px 4px rgba(79, 140, 255, 0.07);
+      transition: background 0.2s;
+    }
+    #output strong {
+      color: #4f8cff;
+      font-weight: 700;
+    }
+    @media (max-width: 500px) {
+      .card { padding: 1.2em 0.5em; }
+      h1 { font-size: 1.4em; }
+      input[type="number"] { width: 80px; }
+    }
   </style>
 </head>
 <body>
-  <h1>Cool Distance Namer</h1>
-  <p>Enter a distance in miles:</p>
-  <input type="number" id="distanceInput" step="0.01" min="0">
-  <button onclick="nameDistance()">Get Cool Name</button>
-
-  <div id="output"></div>
-
+  <div class="card">
+    <h1>How Far Was That?</h1>
+    <p>Enter a distance in miles:</p>
+    <input type="number" id="distanceInput" step="0.01" min="0" placeholder="e.g. 13.1">
+    <button onclick="nameDistance()">How far was that?</button>
+    <div id="output"></div>
+  </div>
   <script>
     const events = [
       { name: '100m Sprint', miles: 0.062 },
@@ -51,8 +133,9 @@
 
     function nameDistance() {
       const inputMiles = parseFloat(document.getElementById('distanceInput').value);
+      const outputDiv = document.getElementById('output');
       if (isNaN(inputMiles) || inputMiles <= 0) {
-        document.getElementById('output').innerText = 'Please enter a valid positive number.';
+        outputDiv.innerHTML = '<span style="color:#e63946;font-weight:600;">Please enter a valid positive number.</span>';
         return;
       }
 
@@ -80,13 +163,13 @@
       } else {
         const prefix = validMultipliers[bestMatch.multiplier];
         if (!prefix) {
-          coolName = 'No cool name found';
+          coolName = 'No better name found';
         } else {
           coolName = `${prefix} ${bestMatch.event}`;
         }
       }
 
-      document.getElementById('output').innerHTML = `You entered <strong>${inputMiles.toFixed(2)} miles</strong>.<br>Cool name: <strong>${coolName}</strong>`;
+      outputDiv.innerHTML = `You entered <strong>${inputMiles.toFixed(2)} miles</strong>.<br>That's actually a: <strong>${coolName}</strong>`;
     }
 
     function isSimpler(name1, name2) {
