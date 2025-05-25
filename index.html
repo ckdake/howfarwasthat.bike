@@ -1,185 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>How Far Was That?</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #4f8cff 0%, #a6ffcb 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .card {
-      background: #fff;
-      border-radius: 1.5em;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-      padding: 2.5em 2em 2em 2em;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-      transition: box-shadow 0.2s;
-    }
-    .card:hover {
-      box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.22);
-    }
-    h1 {
-      font-size: 2.2em;
-      margin-bottom: 0.2em;
-      color: #2b2d42;
-      letter-spacing: -1px;
-      font-weight: 700;
-    }
-    p {
-      color: #555;
-      margin-bottom: 1.5em;
-      font-size: 1.1em;
-    }
-    input[type="number"] {
-      padding: 0.7em 1em;
-      font-size: 1.1em;
-      border: 1.5px solid #4f8cff;
-      border-radius: 0.7em;
-      outline: none;
-      margin-right: 0.5em;
-      width: 120px;
-      transition: border 0.2s;
-      background: #f7faff;
-    }
-    input[type="number"]:focus {
-      border: 2px solid #2b2d42;
-      background: #eaf6ff;
-    }
-    button {
-      padding: 0.7em 1.5em;
-      font-size: 1.1em;
-      background: linear-gradient(90deg, #4f8cff 60%, #38ef7d 100%);
-      color: #fff;
-      border: none;
-      border-radius: 0.7em;
-      cursor: pointer;
-      font-weight: 600;
-      box-shadow: 0 2px 8px rgba(79, 140, 255, 0.08);
-      transition: background 0.2s, box-shadow 0.2s;
-    }
-    button:hover {
-      background: linear-gradient(90deg, #38ef7d 0%, #4f8cff 100%);
-      box-shadow: 0 4px 16px rgba(56, 239, 125, 0.12);
-    }
-    #output {
-      margin-top: 2em;
-      font-size: 1.25em;
-      background: #f7faff;
-      border-radius: 1em;
-      padding: 1.2em 1em;
-      min-height: 3em;
-      color: #222;
-      box-shadow: 0 1px 4px rgba(79, 140, 255, 0.07);
-      transition: background 0.2s;
-    }
-    #output strong {
-      color: #4f8cff;
-      font-weight: 700;
-    }
-    @media (max-width: 500px) {
-      .card { padding: 1.2em 0.5em; }
-      h1 { font-size: 1.4em; }
-      input[type="number"] { width: 80px; }
-    }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>How Far Was That?</h1>
-    <p>Enter a distance in miles:</p>
-    <input type="number" id="distanceInput" step="0.01" min="0" placeholder="e.g. 13.1">
-    <button onclick="nameDistance()">How far was that?</button>
-    <div id="output"></div>
-  </div>
-  <script>
-    const events = [
-      { name: '100m Sprint', miles: 0.062 },
-      { name: 'Furlong', miles: 0.125 },
-      { name: '400m Sprint', miles: 0.25 },
-      { name: '800m Sprint', miles: 0.5 },
-      { name: 'Mile', miles: 1.0 },
-      { name: 'Nautical Mile', miles: 1.15 },
-      { name: 'Indy 500 Lap', miles: 2.5 },
-      { name: '5k', miles: 3.1 },
-      { name: '10k', miles: 6.2 },
-      { name: 'Half-Marathon', miles: 13.1 },
-      { name: 'English Channel', miles: 21.0 },
-      { name: 'Marathon', miles: 26.2 },
-      { name: 'Metric Marathon', miles: 19.88 }, // 32km
-      { name: 'Century', miles: 100.0 },
-      { name: 'Ironman Bike Leg', miles: 112.0 },
-      { name: 'Double Century', miles: 200.0 }
-    ];
-
-    const validMultipliers = {
-      2: 'Double',
-      3: 'Triple',
-      4: 'Quadruple',
-      5: 'Quintuple',
-      6: 'Sextuple',
-      7: 'Septuple',
-      8: 'Octuple',
-      9: 'Nonuple',
-      10: 'Decuple'
-    };
-
-    function nameDistance() {
-      const inputMiles = parseFloat(document.getElementById('distanceInput').value);
-      const outputDiv = document.getElementById('output');
-      if (isNaN(inputMiles) || inputMiles <= 0) {
-        outputDiv.innerHTML = '<span style="color:#e63946;font-weight:600;">Please enter a valid positive number.</span>';
-        return;
+  <head>
+    <meta charset="UTF-8" />
+    <title>How Far Was That?</title>
+    <!-- Add viewport meta tag for responsive scaling -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #4f8cff 0%, #a6ffcb 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
+      .card {
+        background: #fff;
+        border-radius: 1.5em;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+        padding: 2.5em 2em 2em 2em;
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+        transition: box-shadow 0.2s;
+      }
+      .card:hover {
+        box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.22);
+      }
+      h1 {
+        font-size: 2.2em;
+        margin-bottom: 0.2em;
+        color: #2b2d42;
+        letter-spacing: -1px;
+        font-weight: 700;
+      }
+      p {
+        color: #555;
+        margin-bottom: 1.5em;
+        font-size: 1.1em;
+      }
+      input[type="number"] {
+        padding: 0.7em 1em;
+        font-size: 1.1em;
+        border: 1.5px solid #4f8cff;
+        border-radius: 0.7em;
+        outline: none;
+        margin-right: 0.5em;
+        width: 120px;
+        transition: border 0.2s;
+        background: #f7faff;
+      }
+      input[type="number"]:focus {
+        border: 2px solid #2b2d42;
+        background: #eaf6ff;
+      }
+      button {
+        padding: 0.7em 1.5em;
+        font-size: 1.1em;
+        background: linear-gradient(90deg, #4f8cff 60%, #38ef7d 100%);
+        color: #fff;
+        border: none;
+        border-radius: 0.7em;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(79, 140, 255, 0.08);
+        transition: background 0.2s, box-shadow 0.2s;
+      }
+      button:hover {
+        background: linear-gradient(90deg, #38ef7d 0%, #4f8cff 100%);
+        box-shadow: 0 4px 16px rgba(56, 239, 125, 0.12);
+      }
+      #output {
+        margin-top: 2em;
+        font-size: 1.25em;
+        background: #f7faff;
+        border-radius: 1em;
+        padding: 1.2em 1em;
+        min-height: 3em;
+        color: #222;
+        box-shadow: 0 1px 4px rgba(79, 140, 255, 0.07);
+        transition: background 0.2s;
+      }
+      #output strong {
+        color: #4f8cff;
+        font-weight: 700;
+      }
+      @media (max-width: 500px) {
+        body {
+          align-items: flex-start;
+          padding-top: 2em;
+        }
+        .card {
+          padding: 1.2em 0.5em;
+          max-width: 98vw;
+          min-height: unset;
+          box-sizing: border-box;
+        }
+        h1 {
+          font-size: 1.4em;
+        }
+        input[type="number"] {
+          width: 80px;
+          font-size: 1em;
+        }
+        button {
+          font-size: 1em;
+          padding: 0.7em 1em;
+        }
+        #output {
+          font-size: 1em;
+          padding: 1em 0.5em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>How Far Was That?</h1>
+      <p>Enter a distance in miles:</p>
+      <input
+        type="number"
+        id="distanceInput"
+        step="0.01"
+        min="0"
+        placeholder="e.g. 13.1"
+      />
+      <button onclick="nameDistance()">How far was that?</button>
+      <div id="output"></div>
+    </div>
+    <script>
+      const events = [
+        { name: "100m Sprint", miles: 0.062 },
+        { name: "Furlong", miles: 0.125 },
+        { name: "400m Sprint", miles: 0.25 },
+        { name: "800m Sprint", miles: 0.5 },
+        { name: "Mile", miles: 1.0 },
+        { name: "Nautical Mile", miles: 1.15 },
+        { name: "Indy 500 Lap", miles: 2.5 },
+        { name: "5k", miles: 3.1 },
+        { name: "10k", miles: 6.2 },
+        { name: "Half-Marathon", miles: 13.1 },
+        { name: "English Channel", miles: 21.0 },
+        { name: "Marathon", miles: 26.2 },
+        { name: "Metric Marathon", miles: 19.88 }, // 32km
+        { name: "Century", miles: 100.0 },
+        { name: "Ironman Bike Leg", miles: 112.0 },
+        { name: "Double Century", miles: 200.0 },
+      ];
 
-      let bestMatch = null;
-      let bestScore = Infinity;
+      const validMultipliers = {
+        2: "Double",
+        3: "Triple",
+        4: "Quadruple",
+        5: "Quintuple",
+        6: "Sextuple",
+        7: "Septuple",
+        8: "Octuple",
+        9: "Nonuple",
+        10: "Decuple",
+      };
 
-      events.sort((a, b) => b.miles - a.miles); // prioritize longer base events first
+      function nameDistance() {
+        const inputMiles = parseFloat(
+          document.getElementById("distanceInput").value
+        );
+        const outputDiv = document.getElementById("output");
+        if (isNaN(inputMiles) || inputMiles <= 0) {
+          outputDiv.innerHTML =
+            '<span style="color:#e63946;font-weight:600;">Please enter a valid positive number.</span>';
+          return;
+        }
 
-      events.forEach(event => {
-        for (let m = 1; m <= 10; m++) {
-          const total = m * event.miles;
-          const diff = Math.abs(inputMiles - total);
-          const score = diff + m * 0.01; // penalize higher multipliers slightly
+        let bestMatch = null;
+        let bestScore = Infinity;
 
-          if (score < bestScore || (Math.abs(score - bestScore) < 0.01 && isSimpler(event.name, bestMatch?.event))) {
-            bestScore = score;
-            bestMatch = { event: event.name, multiplier: m };
+        events.sort((a, b) => b.miles - a.miles); // prioritize longer base events first
+
+        events.forEach((event) => {
+          for (let m = 1; m <= 10; m++) {
+            const total = m * event.miles;
+            const diff = Math.abs(inputMiles - total);
+            const score = diff + m * 0.01; // penalize higher multipliers slightly
+
+            if (
+              score < bestScore ||
+              (Math.abs(score - bestScore) < 0.01 &&
+                isSimpler(event.name, bestMatch?.event))
+            ) {
+              bestScore = score;
+              bestMatch = { event: event.name, multiplier: m };
+            }
+          }
+        });
+
+        let coolName = "";
+        if (bestMatch.multiplier === 1) {
+          coolName = bestMatch.event;
+        } else {
+          const prefix = validMultipliers[bestMatch.multiplier];
+          if (!prefix) {
+            coolName = "No better name found";
+          } else {
+            coolName = `${prefix} ${bestMatch.event}`;
           }
         }
-      });
 
-      let coolName = '';
-      if (bestMatch.multiplier === 1) {
-        coolName = bestMatch.event;
-      } else {
-        const prefix = validMultipliers[bestMatch.multiplier];
-        if (!prefix) {
-          coolName = 'No better name found';
-        } else {
-          coolName = `${prefix} ${bestMatch.event}`;
-        }
+        outputDiv.innerHTML = `You entered <strong>${inputMiles.toFixed(
+          2
+        )} miles</strong>.<br>That's basically a: <strong>${coolName}</strong>`;
       }
 
-      outputDiv.innerHTML = `You entered <strong>${inputMiles.toFixed(2)} miles</strong>.<br>That's actually a: <strong>${coolName}</strong>`;
-    }
-
-    function isSimpler(name1, name2) {
-      if (!name2) return true;
-      return name1.length < name2.length;
-    }
-  </script>
-</body>
-<footer style="width:100%;text-align:center;margin-top:2em;font-size:0.95em;color:#7a869a;position:fixed;bottom:0;left:0;padding:1em 0;background:rgba(255,255,255,0.7);box-shadow:0 -2px 12px rgba(79,140,255,0.07);">
-  Brought to you by the
-  <a href="https://whattowear.bike" target="_blank" style="color:#4f8cff;text-decoration:none;font-weight:600;">whattowear.bike team</a>
-</footer>
+      function isSimpler(name1, name2) {
+        if (!name2) return true;
+        return name1.length < name2.length;
+      }
+    </script>
+  </body>
+  <footer
+    style="
+      width: 100%;
+      text-align: center;
+      margin-top: 2em;
+      font-size: 0.95em;
+      color: #7a869a;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      padding: 1em 0;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 -2px 12px rgba(79, 140, 255, 0.07);
+    "
+  >
+    Brought to you by the
+    <a
+      href="https://whattowear.bike"
+      target="_blank"
+      style="color: #4f8cff; text-decoration: none; font-weight: 600"
+      >whattowear.bike team</a
+    >
+  </footer>
 </html>
