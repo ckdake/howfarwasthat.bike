@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cool Distance Namer</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    input, button { padding: 0.5em; font-size: 1em; }
+    #output { margin-top: 1em; font-size: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>Cool Distance Namer</h1>
+  <p>Enter a distance in miles:</p>
+  <input type="number" id="distanceInput" step="0.01" min="0">
+  <button onclick="nameDistance()">Get Cool Name</button>
+
+  <div id="output"></div>
+
+  <script>
+    const events = [
+      { name: '100m Sprint', miles: 0.062 },
+      { name: 'Furlong', miles: 0.125 },
+      { name: '400m Sprint', miles: 0.25 },
+      { name: '800m Sprint', miles: 0.5 },
+      { name: 'Mile', miles: 1.0 },
+      { name: 'Nautical Mile', miles: 1.15 },
+      { name: 'Indy 500 Lap', miles: 2.5 },
+      { name: '5k', miles: 3.1 },
+      { name: '10k', miles: 6.2 },
+      { name: 'Half-Marathon', miles: 13.1 },
+      { name: 'English Channel', miles: 21.0 },
+      { name: 'Marathon', miles: 26.2 },
+      { name: 'Metric Marathon', miles: 19.88 }, // 32km
+      { name: 'Century', miles: 100.0 },
+      { name: 'Ironman Bike Leg', miles: 112.0 },
+      { name: 'Double Century', miles: 200.0 }
+    ];
+
+    const validMultipliers = {
+      2: 'Double',
+      3: 'Triple',
+      4: 'Quadruple',
+      5: 'Quintuple',
+      6: 'Sextuple',
+      7: 'Septuple',
+      8: 'Octuple',
+      9: 'Nonuple',
+      10: 'Decuple'
+    };
+
+    function nameDistance() {
+      const inputMiles = parseFloat(document.getElementById('distanceInput').value);
+      if (isNaN(inputMiles) || inputMiles <= 0) {
+        document.getElementById('output').innerText = 'Please enter a valid positive number.';
+        return;
+      }
+
+      let bestMatch = null;
+      let bestScore = Infinity;
+
+      events.sort((a, b) => b.miles - a.miles); // prioritize longer base events first
+
+      events.forEach(event => {
+        for (let m = 1; m <= 10; m++) {
+          const total = m * event.miles;
+          const diff = Math.abs(inputMiles - total);
+          const score = diff + m * 0.01; // penalize higher multipliers slightly
+
+          if (score < bestScore || (Math.abs(score - bestScore) < 0.01 && isSimpler(event.name, bestMatch?.event))) {
+            bestScore = score;
+            bestMatch = { event: event.name, multiplier: m };
+          }
+        }
+      });
+
+      let coolName = '';
+      if (bestMatch.multiplier === 1) {
+        coolName = bestMatch.event;
+      } else {
+        const prefix = validMultipliers[bestMatch.multiplier];
+        if (!prefix) {
+          coolName = 'No cool name found';
+        } else {
+          coolName = `${prefix} ${bestMatch.event}`;
+        }
+      }
+
+      document.getElementById('output').innerHTML = `You entered <strong>${inputMiles.toFixed(2)} miles</strong>.<br>Cool name: <strong>${coolName}</strong>`;
+    }
+
+    function isSimpler(name1, name2) {
+      if (!name2) return true;
+      return name1.length < name2.length;
+    }
+  </script>
+</body>
+</html>
